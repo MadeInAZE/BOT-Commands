@@ -120,8 +120,6 @@ class Bot(BotBase):
             #
             # await channel.send(file=File("./data/images/elon.gif"))
 
-            await self.stdout.send("Now online!")
-
             while self.cogs_ready.all_ready():
                 await sleep(0.5)
 
@@ -132,6 +130,7 @@ class Bot(BotBase):
             print("BOT reconnected!")
 
     async def on_message(self, message):
-        pass
+        if not message.author.bot:
+            await self.process_commands(message)
 
 bot = Bot()
