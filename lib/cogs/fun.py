@@ -1,7 +1,7 @@
 from random import choice, randint
 from typing import Optional
 
-from discord import Member
+from discord import Member, File
 from discord.ext.commands import Cog
 from discord.ext.commands import command
 
@@ -22,8 +22,9 @@ class Fun(Cog):
         await ctx.send(" + ".join([str(r) for r in rolls]) + f" = {sum(rolls)}")
 
     @command(name="slap", aliases=["hit"])
-    async def slap_member(self, ctx, member: Member, *, reason: Optional[str]):
-        pass
+    async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "no reason"):
+        await ctx.send(f"{ctx.author.mention} slapped {member.mention} for {reason}!")
+        await ctx.send(file=File("./data/images/slap.gif"))
 
     @Cog.listener()
     async def on_ready(self):
