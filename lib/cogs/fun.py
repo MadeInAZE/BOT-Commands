@@ -23,8 +23,13 @@ class Fun(Cog):
 
     @command(name="slap", aliases=["hit"])
     async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "no reason"):
-        await ctx.send(f"{ctx.author.mention} slapped {member.mention} for {reason}!")
-        await ctx.send(file=File("./data/images/slap.gif"))
+        await ctx.send(f"{ctx.author.mention} slapped {member.mention}  {reason}!")
+        await ctx.send(file=File("./data/images/slap2.gif"))
+
+    @command(name="echo", aliases=["say"])
+    async def echo_message(self, ctx, *, message):
+        await ctx.message.delete()
+        await ctx.send(message)
 
     @Cog.listener()
     async def on_ready(self):

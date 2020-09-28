@@ -5,6 +5,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Embed, File
 from datetime import datetime
 from discord.ext.commands import CommandNotFound
+from discord.ext.commands import Context
 from ..db import db
 from apscheduler.triggers.cron import CronTrigger
 from asyncio import sleep
@@ -61,6 +62,16 @@ class Bot(BotBase):
         print("Running bot...")
         super().run(self.TOKEN, reconnect=True)
 
+    async def process_commands(self, message):
+        ctx = await self.get_context(message, cls = Context)
+
+        if ctx.command is not None and ctx.guild is not None:
+            if self.ready:
+                    await self.invoke(ctx)
+
+            else:
+                await ctx.send("I'm not listening to your commands you psycho, maybe later...")
+
     async def print_message(self):
         await self.stdout.send("Good Morning!")
 
@@ -99,26 +110,6 @@ class Bot(BotBase):
             self.stdout = self.get_channel(757016278060761178)
             self.scheduler.add_job(self.print_message, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
             self.scheduler.start()
-            #channel = self.channel
-
-            # embed = Embed(title="Now online!", url="https://www.github.com/woosal1337",
-            #               description="MadeInAZE is now online.",
-            #               colour=0xFF0000,
-            #               timestamp=datetime.utcnow())
-            # fields = [("Name", "Value", True),
-            #           ("Another field", "Next to the first one", True),
-            #           ("A non-inline field", "This field will appear on third row.", False)]
-            #
-            # for name, value, inline in fields:
-            #     embed.add_field(name=name, value=value, inline=inline)
-            #
-            # embed.set_author(name="@woosal1337", icon_url=self.guild.icon_url)
-            # embed.set_footer(text="This is a footer xD?")
-            # embed.set_thumbnail(url=self.guild.icon_url)
-            # embed.set_image(url=self.guild.icon_url)
-            # await channel.send(embed=embed)
-            #
-            # await channel.send(file=File("./data/images/elon.gif"))
 
             while self.cogs_ready.all_ready():
                 await sleep(0.5)
